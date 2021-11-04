@@ -1,42 +1,18 @@
-import 'package:expense/homepage.dart';
 import 'package:expense/pages/add_expense.dart';
-import 'package:expense/theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:expense/static.dart' as Static;
 
-void main() async {
-  await Hive.initFlutter();
-  await Hive.openBox('money');
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Expenses',
-      theme: myTheme,
-      home: const HomePageSingleColor(),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePageSingleColor extends StatefulWidget {
+  const HomePageSingleColor({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageSingleColorState createState() => _HomePageSingleColorState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageSingleColorState extends State<HomePageSingleColor> {
   //
 
   @override
@@ -56,27 +32,10 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         },
-        child: Ink(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: <Color>[
-                Color(0xFF24b0e3),
-                Color(0xFFce68fa),
-                Color(0xFFfc9471),
-              ],
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(80.0)),
-          ),
-          child: Container(
-            constraints: const BoxConstraints(
-                minWidth: 88.0,
-                minHeight: 36.0), // min sizes for Material buttons
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.add_outlined,
-              size: 32.0,
-            ),
-          ),
+        backgroundColor: Static.PrimaryColor,
+        child: Icon(
+          Icons.add_outlined,
+          size: 32.0,
         ),
       ),
       //
@@ -102,9 +61,8 @@ class _HomePageState extends State<HomePage> {
                               ),
                               gradient: LinearGradient(
                                 colors: <Color>[
-                                  Color(0xFF24b0e3),
-                                  Color(0xFFce68fa),
-                                  Color(0xFFfc9471),
+                                  Static.PrimaryColor,
+                                  Colors.blueAccent,
                                 ],
                               ),
                             ),
@@ -145,9 +103,8 @@ class _HomePageState extends State<HomePage> {
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         colors: <Color>[
-                          Color(0xFF24b0e3),
-                          Color(0xFFce68fa),
-                          Color(0xFFfc9471),
+                          Static.PrimaryColor,
+                          Colors.blueAccent,
                         ],
                       ),
                       borderRadius: BorderRadius.all(
@@ -157,10 +114,14 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     child: Container(
-                      // constraints: const BoxConstraints(
-                      //   minWidth: 88.0,
-                      //   minHeight: 36.0,
-                      // ), // min sizes for Material buttons
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            24.0,
+                          ),
+                        ),
+                        // color: Static.PrimaryColor,
+                      ),
                       alignment: Alignment.center,
                       padding: EdgeInsets.symmetric(
                         vertical: 18.0,
