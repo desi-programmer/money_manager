@@ -6,6 +6,8 @@
 
 ## `App UI Inspiration` : https://dribbble.com/shots/15560984-Daily-Expense-Tracker
 
+## `App Icon` : <a target="_blank" href="https://icons8.com/icon/pBgBsoOMl5LD/money">Money</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
 ## `Features`
 
     - [ ] Add Montly limit and show How much has been spent Yet.
@@ -20,3 +22,4 @@
     - amount
     - type [ "Income", "Expense" ]
     - date
+    - note ( 256 )
