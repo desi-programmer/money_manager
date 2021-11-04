@@ -13,6 +13,7 @@
     - [ ] Add Expense and Income
     - [ ] Show Total Balance
     - [ ] Option to Extract data or Server ?
+    - [ ] Option to add Bio Auth
 
 ## `Data`
 

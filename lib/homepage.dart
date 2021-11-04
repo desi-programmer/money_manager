@@ -1,4 +1,5 @@
 import 'package:expense/pages/add_expense.dart';
+import 'package:expense/pages/add_expense_no_gradient.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
         onPressed: () {
           Navigator.of(context).push(
             CupertinoPageRoute(
-              builder: (context) => AddExpense(),
+              builder: (context) => AddExpenseNoGradient(),
             ),
           );
         },
