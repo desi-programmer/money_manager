@@ -1,10 +1,11 @@
-import 'package:expense/pages/add_expense.dart';
 import 'package:expense/pages/add_expense_no_gradient.dart';
+import 'package:expense/pages/settings.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:expense/static.dart' as Static;
+import 'package:hive/hive.dart';
 
 class HomePageSingleColor extends StatefulWidget {
   const HomePageSingleColor({Key? key}) : super(key: key);
@@ -15,6 +16,63 @@ class HomePageSingleColor extends StatefulWidget {
 
 class _HomePageSingleColorState extends State<HomePageSingleColor> {
   //
+  late Box box;
+  Map? data;
+  int totalBalance = 0;
+  int totalIncome = 0;
+  int totalExpense = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    box = Hive.box('money');
+  }
+
+  Future<Map> fetch() {
+    if (box.values.isEmpty) {
+      return Future.value({});
+    } else {
+      return Future.value(box.toMap());
+    }
+  }
+  //
+
+  List<FlSpot> getPlotPoints(Map entireData) {
+    List<FlSpot> dataSet = [];
+    entireData.forEach((key, value) {
+      print(
+        (value['date'] as DateTime).day.toDouble(),
+      );
+      print((value['amount'] as int).toDouble());
+      if (value['type'] == "Expense") {
+        dataSet.add(
+          FlSpot(
+            (value['date'] as DateTime).day.toDouble(),
+            (value['amount'] as int).toDouble(),
+          ),
+        );
+      }
+    });
+    print(dataSet);
+    return dataSet;
+  }
+
+  getTotalBalance(Map entireData) {
+    totalBalance = 0;
+    totalIncome = 0;
+    totalExpense = 0;
+    entireData.forEach((key, value) {
+      // print(key);
+      // print(value['type']);
+      if (value['type'] == "Income") {
+        totalBalance += (value['amount'] as int);
+        totalIncome += (value['amount'] as int);
+      } else {
+        totalBalance -= (value['amount'] as int);
+        totalExpense += (value['amount'] as int);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +80,20 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
       appBar: AppBar(
         toolbarHeight: 0.0,
       ),
-      backgroundColor: Color(0xffede9f0),
+      backgroundColor: Colors.grey[200],
       //
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
+          Navigator.of(context)
+              .push(
             CupertinoPageRoute(
               builder: (context) => AddExpenseNoGradient(),
             ),
-          );
+          )
+              .then((value) {
+            setState(() {});
+          });
         },
         backgroundColor: Static.PrimaryColor,
         child: Icon(
@@ -40,10 +102,28 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
         ),
       ),
       //
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
+      body: FutureBuilder<Map>(
+        future: fetch(),
+        builder: (context, snapshot) {
+          // print(snapshot.data);
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                "Oopssss !!! There is some error !",
+              ),
+            );
+          }
+          if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return Center(
+                child: Text(
+                  "You haven't added Any Data !",
+                ),
+              );
+            }
+            //
+            getTotalBalance(snapshot.data!);
+            return ListView(
               children: [
                 //
                 Padding(
@@ -76,8 +156,11 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                               ),
                             ),
                           ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
                           Text(
-                            "\tWelcome Prince",
+                            "Welcome Prince",
                             style: TextStyle(
                               fontSize: 24.0,
                               fontWeight: FontWeight.w700,
@@ -86,10 +169,23 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                           ),
                         ],
                       ),
-                      Icon(
-                        Icons.settings,
-                        size: 32.0,
-                        color: Color(0xff3E454C),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(
+                            MaterialPageRoute(
+                              builder: (context) => Settings(),
+                            ),
+                          )
+                              .then((value) {
+                            setState(() {});
+                          });
+                        },
+                        child: Icon(
+                          Icons.settings,
+                          size: 32.0,
+                          color: Color(0xff3E454C),
+                        ),
                       ),
                     ],
                   ),
@@ -143,7 +239,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                             height: 12.0,
                           ),
                           Text(
-                            'Rs 32000',
+                            'Rs $totalBalance',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 36.0,
@@ -160,10 +256,10 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 cardIncome(
-                                  "1600",
+                                  totalIncome.toString(),
                                 ),
                                 cardExpense(
-                                  "1200",
+                                  totalExpense.toString(),
                                 ),
                               ],
                             ),
@@ -221,16 +317,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                       ),
                       lineBarsData: [
                         LineChartBarData(
-                          spots: [
-                            FlSpot(2, 1000),
-                            FlSpot(3, 1200),
-                            FlSpot(4, 3000),
-                            FlSpot(5, 2000),
-                            FlSpot(8, 1400),
-                            FlSpot(10, 1320),
-                            FlSpot(12, 900),
-                            FlSpot(17, 1900),
-                          ],
+                          spots: getPlotPoints(snapshot.data!),
                           isCurved: false,
                           barWidth: 2.5,
                           colors: [
@@ -258,26 +345,46 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                   ),
                 ),
                 //
-                creditTile(
-                  12000,
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    Map dataAtIndex = snapshot.data![index];
+                    if (dataAtIndex['type'] == "Income") {
+                      return incomeTile(
+                          dataAtIndex['amount'], dataAtIndex['note']);
+                    } else {
+                      return expenseTile(
+                          dataAtIndex['amount'], dataAtIndex['note']);
+                    }
+                  },
                 ),
-                expenseTile(
-                  2000,
-                ),
-                expenseTile(
-                  4000,
-                ),
-                expenseTile(
-                  2200,
-                ),
+                //
+                // incomeTile(
+                //   12000,
+                // ),
+                // expenseTile(
+                //   2000,
+                // ),
+                // expenseTile(
+                //   4000,
+                // ),
+                // expenseTile(
+                //   2200,
+                // ),
                 //
                 SizedBox(
                   height: 40.0,
                 ),
               ],
-            ),
-          ),
-        ],
+            );
+          } else {
+            return Text(
+              "Loading...",
+            );
+          }
+        },
       ),
     );
   }
@@ -382,7 +489,7 @@ Widget cardExpense(String value) {
   );
 }
 
-Widget expenseTile(int value) {
+Widget expenseTile(int value, String note) {
   return Container(
     padding: const EdgeInsets.all(18.0),
     margin: const EdgeInsets.all(8.0),
@@ -391,29 +498,47 @@ Widget expenseTile(int value) {
         borderRadius: BorderRadius.circular(
           8.0,
         )),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(
-              Icons.arrow_circle_up_outlined,
-              size: 28.0,
-              color: Colors.red[700],
+            Row(
+              children: [
+                Icon(
+                  Icons.arrow_circle_up_outlined,
+                  size: 28.0,
+                  color: Colors.red[700],
+                ),
+                SizedBox(
+                  width: 4.0,
+                ),
+                Text(
+                  "Expense",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),
+                ),
+              ],
             ),
             Text(
-              "\tExpense",
+              "- $value",
               style: TextStyle(
-                fontSize: 20.0,
+                fontSize: 24.0,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],
         ),
-        Text(
-          "- $value",
-          style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.w700,
+        //
+        Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+            note,
+            style: TextStyle(
+              color: Colors.grey[800],
+            ),
           ),
         ),
       ],
@@ -421,7 +546,7 @@ Widget expenseTile(int value) {
   );
 }
 
-Widget creditTile(int value) {
+Widget incomeTile(int value, String note) {
   return Container(
     padding: const EdgeInsets.all(18.0),
     margin: const EdgeInsets.all(8.0),
@@ -430,29 +555,47 @@ Widget creditTile(int value) {
         borderRadius: BorderRadius.circular(
           8.0,
         )),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(
-              Icons.arrow_circle_down_outlined,
-              size: 28.0,
-              color: Colors.green[700],
+            Row(
+              children: [
+                Icon(
+                  Icons.arrow_circle_down_outlined,
+                  size: 28.0,
+                  color: Colors.green[700],
+                ),
+                SizedBox(
+                  width: 4.0,
+                ),
+                Text(
+                  "Credit",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),
+                ),
+              ],
             ),
             Text(
-              "\tCredit",
+              "+ $value",
               style: TextStyle(
-                fontSize: 20.0,
+                fontSize: 24.0,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],
         ),
-        Text(
-          "+ $value",
-          style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.w700,
+        //
+        Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+            note,
+            style: TextStyle(
+              color: Colors.grey[800],
+            ),
           ),
         ),
       ],

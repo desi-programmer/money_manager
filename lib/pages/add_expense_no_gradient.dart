@@ -1,3 +1,4 @@
+import 'package:expense/controllers/db_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:expense/static.dart' as Static;
@@ -13,8 +14,8 @@ class AddExpenseNoGradient extends StatefulWidget {
 class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
   DateTime selectedDate = DateTime.now();
   int? amount;
-
-  String selected = "Income";
+  String note = "Expence";
+  String type = "Income";
 
   List<String> months = [
     "Jan",
@@ -85,6 +86,23 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
             height: 12.0,
           ),
           //
+          //
+          TextField(
+            decoration: InputDecoration(
+              hintText: "Note on Expense",
+              border: InputBorder.none,
+            ),
+            style: TextStyle(
+              fontSize: 20.0,
+            ),
+            onChanged: (val) {
+              note = val;
+            },
+          ),
+          SizedBox(
+            height: 12.0,
+          ),
+          //
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
@@ -94,18 +112,18 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
                     "Income",
                     style: TextStyle(
                       fontSize: 18.0,
-                      color: selected == "Income" ? Colors.white : Colors.black,
+                      color: type == "Income" ? Colors.white : Colors.black,
                     ),
                   ),
                   selectedColor: Static.PrimaryColor,
                   onSelected: (val) {
                     if (val) {
                       setState(() {
-                        selected = "Income";
+                        type = "Income";
                       });
                     }
                   },
-                  selected: selected == "Income" ? true : false,
+                  selected: type == "Income" ? true : false,
                 ),
                 SizedBox(
                   width: 8.0,
@@ -115,19 +133,18 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
                     "Expense",
                     style: TextStyle(
                       fontSize: 18.0,
-                      color:
-                          selected == "Expense" ? Colors.white : Colors.black,
+                      color: type == "Expense" ? Colors.white : Colors.black,
                     ),
                   ),
                   selectedColor: Static.PrimaryColor,
                   onSelected: (val) {
                     if (val) {
                       setState(() {
-                        selected = "Expense";
+                        type = "Expense";
                       });
                     }
                   },
-                  selected: selected == "Expense" ? true : false,
+                  selected: type == "Expense" ? true : false,
                 ),
               ],
             ),
@@ -176,9 +193,12 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
             height: 50.0,
             child: ElevatedButton(
               onPressed: () {
-                print(amount);
-                print(selected);
-                print(selectedDate);
+                // print(amount);
+                // print(type);
+                // print(selectedDate);
+                DbHelper dbHelper = DbHelper();
+                dbHelper.addData(amount!, selectedDate, type, note);
+                Navigator.of(context).pop();
               },
               child: Text(
                 "Add",

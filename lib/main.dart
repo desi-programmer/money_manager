@@ -5,7 +5,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:expense/static.dart' as Static;
 
 void main() async {
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         toolbarHeight: 0.0,
       ),
-      backgroundColor: Color(0xffede9f0),
+      backgroundColor: Colors.grey[200],
       //
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -479,7 +480,7 @@ Widget creditTile(int value) {
               color: Colors.green[700],
             ),
             Text(
-              "\tCredit",
+              "Credit",
               style: TextStyle(
                 fontSize: 20.0,
               ),
