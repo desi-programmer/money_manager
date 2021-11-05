@@ -70,11 +70,11 @@ ThemeData myTheme = ThemeData(
   fontFamily: "customFont",
   primaryColor: Color(0xff15049b),
   primarySwatch: PrimaryMaterialColor,
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(
-        Color(0xff15049b),
-      ),
+  appBarTheme: AppBarTheme(
+    titleTextStyle: TextStyle(
+      fontSize: 20.0,
+      fontFamily: "customFont",
+      fontWeight: FontWeight.w600,
     ),
   ),
 );

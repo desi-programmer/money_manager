@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:expense/static.dart' as Static;
 import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePageSingleColor extends StatefulWidget {
   const HomePageSingleColor({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class HomePageSingleColor extends StatefulWidget {
 class _HomePageSingleColorState extends State<HomePageSingleColor> {
   //
   late Box box;
+  late SharedPreferences preferences;
   Map? data;
   int totalBalance = 0;
   int totalIncome = 0;
@@ -24,10 +26,30 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   List<FlSpot> dataSet = [];
   DateTime today = DateTime.now();
 
+  List<String> months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
   @override
   void initState() {
     super.initState();
+    getPreference();
     box = Hive.box('money');
+  }
+
+  getPreference() async {
+    preferences = await SharedPreferences.getInstance();
   }
 
   Future<Map> fetch() {
@@ -40,6 +62,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   //
 
   List<FlSpot> getPlotPoints(Map entireData) {
+    dataSet = [];
     entireData.forEach((key, value) {
       print(
         (value['date'] as DateTime).day.toDouble(),
@@ -167,32 +190,47 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                           SizedBox(
                             width: 8.0,
                           ),
-                          Text(
-                            "Welcome Prince",
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.w700,
-                              color: Static.PrimaryMaterialColor[800],
+                          SizedBox(
+                            width: 200.0,
+                            child: Text(
+                              "Welcome ${preferences.getString('name')}",
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w700,
+                                color: Static.PrimaryMaterialColor[800],
+                              ),
+                              maxLines: 1,
                             ),
                           ),
                         ],
                       ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(
-                            MaterialPageRoute(
-                              builder: (context) => Settings(),
-                            ),
-                          )
-                              .then((value) {
-                            setState(() {});
-                          });
-                        },
-                        child: Icon(
-                          Icons.settings,
-                          size: 32.0,
-                          color: Color(0xff3E454C),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            12.0,
+                          ),
+                          color: Colors.white70,
+                        ),
+                        padding: EdgeInsets.all(
+                          12.0,
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(
+                              MaterialPageRoute(
+                                builder: (context) => Settings(),
+                              ),
+                            )
+                                .then((value) {
+                              setState(() {});
+                            });
+                          },
+                          child: Icon(
+                            Icons.settings,
+                            size: 32.0,
+                            color: Color(0xff3E454C),
+                          ),
                         ),
                       ),
                     ],
@@ -283,11 +321,11 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                     12.0,
                   ),
                   child: Text(
-                    "Nov 2021",
+                    "${months[today.month - 1]} ${today.year}",
                     style: TextStyle(
-                      fontSize: 24.0,
-                      color: Colors.grey[700],
-                      fontWeight: FontWeight.w700,
+                      fontSize: 32.0,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ),
@@ -352,11 +390,6 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                         ),
                         child: LineChart(
                           LineChartData(
-                            axisTitleData: FlAxisTitleData(
-                              bottomTitle: AxisTitle(
-                                titleText: 'Dates',
-                              ),
-                            ),
                             borderData: FlBorderData(
                               show: false,
                             ),
@@ -370,7 +403,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                                 ],
                                 showingIndicators: [200, 200, 90, 10],
                                 dotData: FlDotData(
-                                  show: false,
+                                  show: true,
                                 ),
                               ),
                             ],
@@ -383,9 +416,9 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                   child: Text(
                     "Recent Expenses",
                     style: TextStyle(
-                      fontSize: 24.0,
-                      color: Colors.grey[700],
-                      fontWeight: FontWeight.w700,
+                      fontSize: 32.0,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ),

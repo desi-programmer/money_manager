@@ -68,7 +68,7 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
           ),
           //
           SizedBox(
-            height: 12.0,
+            height: 20.0,
           ),
           //
           Row(
@@ -116,10 +116,10 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
               ),
             ],
           ),
-          SizedBox(
-            height: 16.0,
-          ),
           //
+          SizedBox(
+            height: 20.0,
+          ),
           //
           Row(
             children: [
@@ -159,8 +159,9 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
               ),
             ],
           ),
+          //
           SizedBox(
-            height: 16.0,
+            height: 20.0,
           ),
           //
           Row(
@@ -228,7 +229,7 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
           ),
           //
           SizedBox(
-            height: 16.0,
+            height: 20.0,
           ),
           //
           SizedBox(
@@ -280,7 +281,7 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
           ),
           //
           SizedBox(
-            height: 12.0,
+            height: 20.0,
           ),
           //
           SizedBox(

@@ -1,6 +1,6 @@
 # ` Expense App `
 
-
+This app helps you with managing Income and Expense. It is coded in flutter, dart hive. TBH I want to code the same app in Flutter , React and Jetpack Compose to see the difference and get some experience, but let's see what Happens. :) 🤠🤗
 
 # `Credits`
 
@@ -20,6 +20,7 @@
     - [ ] Show Total Balance
     - [ ] Option to Extract data or Server ?
     - [ ] Option to add Bio Auth
+    - [ ] Chart plot points is based on when user enters data , not on expense date , so chart might have bars coming back and moving front
 
 ```
 ## `Data`

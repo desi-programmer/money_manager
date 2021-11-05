@@ -64,6 +64,90 @@ class _SettingsState extends State<Settings> {
               color: Colors.black87,
             ),
           ),
+          //
+          SizedBox(
+            height: 20.0,
+          ),
+          //
+          ListTile(
+            onTap: () async {
+              String nameEditing = "";
+              String? name = await showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Colors.grey[300],
+                  title: Text(
+                    "Enter new name",
+                  ),
+                  content: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white70,
+                      borderRadius: BorderRadius.circular(
+                        12.0,
+                      ),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 16.0,
+                    ),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "Your Name",
+                        border: InputBorder.none,
+                      ),
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                      maxLength: 12,
+                      onChanged: (val) {
+                        nameEditing = val;
+                      },
+                    ),
+                  ),
+                  actions: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(nameEditing);
+                      },
+                      child: Text(
+                        "OK",
+                      ),
+                    ),
+                  ],
+                ),
+              );
+              //
+              if (name != null && name.isNotEmpty) {
+                DbHelper dbHelper = DbHelper();
+                await dbHelper.addName(name);
+              }
+            },
+            tileColor: Colors.white,
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 12.0,
+              horizontal: 20.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                8.0,
+              ),
+            ),
+            title: Text(
+              "Change Name",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            subtitle: Text(
+              "Welcome {newname}",
+            ),
+            trailing: Icon(
+              Icons.change_circle,
+              size: 32.0,
+              color: Colors.black87,
+            ),
+          ),
         ],
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DbHelper {
   late Box box;
+  late SharedPreferences preferences;
 
   DbHelper() {
     openBox();
@@ -18,5 +20,15 @@ class DbHelper {
 
   Future cleanData() async {
     await box.clear();
+  }
+
+  addName(String name) async {
+    preferences = await SharedPreferences.getInstance();
+    preferences.setString('name', name);
+  }
+
+  getName() async {
+    preferences = await SharedPreferences.getInstance();
+    return preferences.getString('name');
   }
 }

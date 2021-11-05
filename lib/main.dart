@@ -1,5 +1,7 @@
+import 'package:expense/controllers/db_helper.dart';
 import 'package:expense/pages/homepage.dart';
 import 'package:expense/pages/add_expense.dart';
+import 'package:expense/pages/splash.dart';
 import 'package:expense/theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Expenses',
       theme: myTheme,
-      home: const HomePageSingleColor(),
+      home: const Splash(),
     );
   }
 }
