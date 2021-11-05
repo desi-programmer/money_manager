@@ -1,7 +1,5 @@
 # Expense
 
-## `Font` : https://www.cufonfonts.com/font/manti-sans-demo
-
 ## `Icon` : <div>Icons made by <a href="https://www.flaticon.com/authors/gowi" title="GOWI">GOWI</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
 ## `App UI Inspiration` : https://dribbble.com/shots/15560984-Daily-Expense-Tracker

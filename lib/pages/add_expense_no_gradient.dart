@@ -51,13 +51,15 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
       appBar: AppBar(
         toolbarHeight: 0.0,
       ),
+      backgroundColor: Color(0xffe2e7ef),
+      //
       body: ListView(
         padding: EdgeInsets.all(
           12.0,
         ),
         children: [
           Text(
-            "\nAdd Expense/Income",
+            "\nAdd Transaction",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 32.0,
@@ -65,97 +67,172 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
             ),
           ),
           //
-          TextField(
-            decoration: InputDecoration(
-              hintText: "0",
-              border: InputBorder.none,
-            ),
-            style: TextStyle(
-              fontSize: 24.0,
-            ),
-            onChanged: (val) {
-              amount = int.parse(val);
-            },
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
+          SizedBox(
+            height: 12.0,
+          ),
+          //
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Static.PrimaryColor,
+                  borderRadius: BorderRadius.circular(
+                    16.0,
+                  ),
+                ),
+                padding: EdgeInsets.all(
+                  12.0,
+                ),
+                child: Icon(
+                  Icons.attach_money,
+                  size: 24.0,
+                  // color: Colors.grey[700],
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                width: 12.0,
+              ),
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: "0",
+                    border: InputBorder.none,
+                  ),
+                  style: TextStyle(
+                    fontSize: 24.0,
+                  ),
+                  onChanged: (val) {
+                    try {
+                      amount = int.parse(val);
+                    } catch (e) {}
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  keyboardType: TextInputType.number,
+                  // textAlign: TextAlign.center,
+                ),
+              ),
             ],
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
           ),
           SizedBox(
-            height: 12.0,
+            height: 16.0,
           ),
           //
           //
-          TextField(
-            decoration: InputDecoration(
-              hintText: "Note on Expense",
-              border: InputBorder.none,
-            ),
-            style: TextStyle(
-              fontSize: 20.0,
-            ),
-            onChanged: (val) {
-              note = val;
-            },
-          ),
-          SizedBox(
-            height: 12.0,
-          ),
-          //
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              children: [
-                ChoiceChip(
-                  label: Text(
-                    "Income",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: type == "Income" ? Colors.white : Colors.black,
-                    ),
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Static.PrimaryColor,
+                  borderRadius: BorderRadius.circular(
+                    16.0,
                   ),
-                  selectedColor: Static.PrimaryColor,
-                  onSelected: (val) {
-                    if (val) {
-                      setState(() {
-                        type = "Income";
-                      });
-                    }
-                  },
-                  selected: type == "Income" ? true : false,
                 ),
-                SizedBox(
-                  width: 8.0,
+                padding: EdgeInsets.all(
+                  12.0,
                 ),
-                ChoiceChip(
-                  label: Text(
-                    "Expense",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: type == "Expense" ? Colors.white : Colors.black,
-                    ),
+                child: Icon(
+                  Icons.description,
+                  size: 24.0,
+                  // color: Colors.grey[700],
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                width: 12.0,
+              ),
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: "Note on Transaction",
+                    border: InputBorder.none,
                   ),
-                  selectedColor: Static.PrimaryColor,
-                  onSelected: (val) {
-                    if (val) {
-                      setState(() {
-                        type = "Expense";
-                      });
-                    }
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),
+                  onChanged: (val) {
+                    note = val;
                   },
-                  selected: type == "Expense" ? true : false,
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 16.0,
+          ),
+          //
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Static.PrimaryColor,
+                  borderRadius: BorderRadius.circular(
+                    16.0,
+                  ),
+                ),
+                padding: EdgeInsets.all(
+                  12.0,
+                ),
+                child: Icon(
+                  Icons.attach_money,
+                  size: 24.0,
+                  // color: Colors.grey[700],
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                width: 12.0,
+              ),
+              ChoiceChip(
+                label: Text(
+                  "Income",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: type == "Income" ? Colors.white : Colors.black,
+                  ),
+                ),
+                selectedColor: Static.PrimaryColor,
+                onSelected: (val) {
+                  if (val) {
+                    setState(() {
+                      type = "Income";
+                    });
+                  }
+                },
+                selected: type == "Income" ? true : false,
+              ),
+              SizedBox(
+                width: 8.0,
+              ),
+              ChoiceChip(
+                label: Text(
+                  "Expense",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: type == "Expense" ? Colors.white : Colors.black,
+                  ),
+                ),
+                selectedColor: Static.PrimaryColor,
+                onSelected: (val) {
+                  if (val) {
+                    setState(() {
+                      type = "Expense";
+                    });
+                  }
+                },
+                selected: type == "Expense" ? true : false,
+              ),
+            ],
           ),
           //
           SizedBox(
-            height: 12.0,
+            height: 16.0,
           ),
           //
-          Padding(
-            padding: const EdgeInsets.all(12.0),
+          SizedBox(
+            height: 50.0,
             child: TextButton(
               onPressed: () {
                 _selectDate(context);
@@ -163,12 +240,29 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
                 // to make sure that no keyboard is shown after selecting Date
                 FocusScope.of(context).unfocus();
               },
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  EdgeInsets.zero,
+                ),
+              ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.date_range,
-                    size: 24.0,
-                    color: Colors.grey[700],
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Static.PrimaryColor,
+                      borderRadius: BorderRadius.circular(
+                        16.0,
+                      ),
+                    ),
+                    padding: EdgeInsets.all(
+                      12.0,
+                    ),
+                    child: Icon(
+                      Icons.date_range,
+                      size: 24.0,
+                      // color: Colors.grey[700],
+                      color: Colors.white,
+                    ),
                   ),
                   SizedBox(
                     width: 12.0,

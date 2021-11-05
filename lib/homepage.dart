@@ -21,6 +21,8 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   int totalBalance = 0;
   int totalIncome = 0;
   int totalExpense = 0;
+  List<FlSpot> dataSet = [];
+  DateTime today = DateTime.now();
 
   @override
   void initState() {
@@ -38,13 +40,13 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   //
 
   List<FlSpot> getPlotPoints(Map entireData) {
-    List<FlSpot> dataSet = [];
     entireData.forEach((key, value) {
       print(
         (value['date'] as DateTime).day.toDouble(),
       );
       print((value['amount'] as int).toDouble());
-      if (value['type'] == "Expense") {
+      if (value['type'] == "Expense" &&
+          (value['date'] as DateTime).month == today.month) {
         dataSet.add(
           FlSpot(
             (value['date'] as DateTime).day.toDouble(),
@@ -123,6 +125,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
             }
             //
             getTotalBalance(snapshot.data!);
+            getPlotPoints(snapshot.data!);
             return ListView(
               children: [
                 //
@@ -284,54 +287,91 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                   ),
                 ),
                 //
-                Container(
-                  height: 300.0,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 40.0,
-                    horizontal: 12.0,
-                  ),
-                  margin: EdgeInsets.all(
-                    12.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: LineChart(
-                    LineChartData(
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: getPlotPoints(snapshot.data!),
-                          isCurved: false,
-                          barWidth: 2.5,
-                          colors: [
-                            Static.PrimaryColor,
+                dataSet.isEmpty
+                    ? Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 40.0,
+                          horizontal: 20.0,
+                        ),
+                        margin: EdgeInsets.all(
+                          12.0,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            8.0,
+                          ),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
                           ],
-                          showingIndicators: [200, 200, 90, 10],
-                          dotData: FlDotData(
-                            show: false,
+                        ),
+                        child: Text(
+                          "Not Enough Data to render Chart",
+                          style: TextStyle(
+                            fontSize: 20.0,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
+                      )
+                    : Container(
+                        height: 400.0,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 40.0,
+                          horizontal: 12.0,
+                        ),
+                        margin: EdgeInsets.all(
+                          12.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: LineChart(
+                          LineChartData(
+                            axisTitleData: FlAxisTitleData(
+                              bottomTitle: AxisTitle(
+                                titleText: 'Dates',
+                              ),
+                            ),
+                            borderData: FlBorderData(
+                              show: false,
+                            ),
+                            lineBarsData: [
+                              LineChartBarData(
+                                spots: getPlotPoints(snapshot.data!),
+                                isCurved: false,
+                                barWidth: 2.5,
+                                colors: [
+                                  Static.PrimaryColor,
+                                ],
+                                showingIndicators: [200, 200, 90, 10],
+                                dotData: FlDotData(
+                                  show: false,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                 //
                 Padding(
                   padding: const EdgeInsets.all(12.0),
