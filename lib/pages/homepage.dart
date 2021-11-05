@@ -97,6 +97,11 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
             setState(() {});
           });
         },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            16.0,
+          ),
+        ),
         backgroundColor: Static.PrimaryColor,
         child: Icon(
           Icons.add_outlined,
