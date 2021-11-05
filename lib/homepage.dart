@@ -153,8 +153,8 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                             child: CircleAvatar(
                               maxRadius: 28.0,
                               backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                "http://clipart-library.com/images_k/transparent-happy-emoji/transparent-happy-emoji-15.png",
+                              child: Image.asset(
+                                "assets/face.png",
                                 width: 64.0,
                               ),
                             ),
