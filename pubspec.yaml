@@ -77,9 +77,13 @@ flutter:
   fonts:
     - family: customFont
       fonts:
-        - asset: assets/fonts/Oxygen-Regular.ttf
-        - asset: assets/fonts/Oxygen-Bold.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-Regular.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/DM_Sans/DMSans-Bold.ttf
           weight: 800
+        - asset: assets/fonts/DM_Sans/DMSans-Bold.ttf
+          weight: 900
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
