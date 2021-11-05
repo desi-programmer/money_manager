@@ -1,6 +1,20 @@
-# ` Expense App `
+# `Expense App`
 
 This app helps you with managing Income and Expense. It is coded in flutter, dart hive. TBH I want to code the same app in Flutter , React and Jetpack Compose to see the difference and get some experience, but let's see what Happens. :) 🤠🤗
+
+# `Screenshots`
+
+<img src="screenshots/Screenshot_1636140672_framed.png" width="500" alt="Screenshot">
+
+<img src="screenshots/Screenshot_1636140708_framed.png" width="500" alt="Screenshot">
+
+<img src="screenshots/Screenshot_1636140723_framed.png" width="500" alt="Screenshot">
+
+<img src="screenshots/Screenshot_1636140829_framed.png" width="500" alt="Screenshot">
+
+<img src="screenshots/Screenshot_1636140834_framed.png" width="500" alt="Screenshot">
+
+<img src="screenshots/Screenshot_1636140838_framed.png" width="500" alt="Screenshot">
 
 # `Credits`
 
