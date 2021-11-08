@@ -2,6 +2,13 @@
 
 This app helps you with managing Income and Expense. It is coded in flutter, dart hive. TBH I want to code the same app in Flutter , React and Jetpack Compose to see the difference and get some experience, but let's see what Happens. :) 🤠🤗
 
+```
+Note : This is right now an active project where I 
+am making changes, If you want the same version as 
+in Youtube Tutorial Version 1 : Download the zip 
+file the same name.
+```
+
 # `Screenshots`
 
 <img src="screenshots/Screenshot_1636140672_framed.png" width="500" alt="Screenshot">
