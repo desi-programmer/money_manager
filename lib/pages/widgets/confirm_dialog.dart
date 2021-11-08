@@ -12,6 +12,11 @@ showConfirmDialog(BuildContext context, String title, String content) async {
           onPressed: () {
             Navigator.of(context).pop(true);
           },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              Colors.red,
+            ),
+          ),
           child: Text(
             "YES",
           ),
