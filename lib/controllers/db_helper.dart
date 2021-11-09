@@ -18,6 +18,12 @@ class DbHelper {
     box.add(value);
   }
 
+  Future deleteData(
+    int index,
+  ) async {
+    await box.deleteAt(index);
+  }
+
   Future cleanData() async {
     await box.clear();
   }

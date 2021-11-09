@@ -9,7 +9,7 @@ SnackBar deleteInfoSnackBar = SnackBar(
   content: Row(
     children: [
       Icon(
-        Icons.info,
+        Icons.info_outline,
         color: Colors.white,
       ),
       SizedBox(

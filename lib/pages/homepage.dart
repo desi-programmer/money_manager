@@ -1,5 +1,8 @@
+import 'package:expense/controllers/db_helper.dart';
 import 'package:expense/pages/add_expense_no_gradient.dart';
 import 'package:expense/pages/settings.dart';
+import 'package:expense/pages/widgets/confirm_dialog.dart';
+import 'package:expense/pages/widgets/info_snackbar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +22,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   //
   late Box box;
   late SharedPreferences preferences;
+  DbHelper dbHelper = DbHelper();
   Map? data;
   int totalBalance = 0;
   int totalIncome = 0;
@@ -64,10 +68,6 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   List<FlSpot> getPlotPoints(Map entireData) {
     dataSet = [];
     entireData.forEach((key, value) {
-      print(
-        (value['date'] as DateTime).day.toDouble(),
-      );
-      print((value['amount'] as int).toDouble());
       if (value['type'] == "Expense" &&
           (value['date'] as DateTime).month == today.month) {
         dataSet.add(
@@ -78,7 +78,6 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
         );
       }
     });
-    print(dataSet);
     return dataSet;
   }
 
@@ -87,8 +86,6 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
     totalIncome = 0;
     totalExpense = 0;
     entireData.forEach((key, value) {
-      // print(key);
-      // print(value['type']);
       if (value['type'] == "Income") {
         totalBalance += (value['amount'] as int);
         totalIncome += (value['amount'] as int);
@@ -431,26 +428,21 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                     Map dataAtIndex = snapshot.data![index];
                     if (dataAtIndex['type'] == "Income") {
                       return incomeTile(
-                          dataAtIndex['amount'], dataAtIndex['note']);
+                        dataAtIndex['amount'],
+                        dataAtIndex['note'],
+                        dataAtIndex['date'],
+                        index,
+                      );
                     } else {
                       return expenseTile(
-                          dataAtIndex['amount'], dataAtIndex['note']);
+                        dataAtIndex['amount'],
+                        dataAtIndex['note'],
+                        dataAtIndex['date'],
+                        index,
+                      );
                     }
                   },
                 ),
-                //
-                // incomeTile(
-                //   12000,
-                // ),
-                // expenseTile(
-                //   2000,
-                // ),
-                // expenseTile(
-                //   4000,
-                // ),
-                // expenseTile(
-                //   2200,
-                // ),
                 //
                 SizedBox(
                   height: 40.0,
@@ -466,7 +458,6 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
       ),
     );
   }
-}
 
 //
 //
@@ -475,208 +466,288 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
 //
 //
 
-Widget cardIncome(String value) {
-  return Row(
-    children: [
-      Container(
-        decoration: BoxDecoration(
-          color: Colors.white60,
-          borderRadius: BorderRadius.circular(
-            20.0,
-          ),
-        ),
-        padding: EdgeInsets.all(
-          6.0,
-        ),
-        child: Icon(
-          Icons.arrow_downward,
-          size: 28.0,
-          color: Colors.green[700],
-        ),
-        margin: EdgeInsets.only(
-          right: 8.0,
-        ),
-      ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Income",
-            style: TextStyle(
-              fontSize: 14.0,
-              color: Colors.white70,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    ],
-  );
-}
-
-Widget cardExpense(String value) {
-  return Row(
-    children: [
-      Container(
-        decoration: BoxDecoration(
-          color: Colors.white60,
-          borderRadius: BorderRadius.circular(
-            20.0,
-          ),
-        ),
-        padding: EdgeInsets.all(
-          6.0,
-        ),
-        child: Icon(
-          Icons.arrow_upward,
-          size: 28.0,
-          color: Colors.red[700],
-        ),
-        margin: EdgeInsets.only(
-          right: 8.0,
-        ),
-      ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Expense",
-            style: TextStyle(
-              fontSize: 14.0,
-              color: Colors.white70,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    ],
-  );
-}
-
-Widget expenseTile(int value, String note) {
-  return Container(
-    padding: const EdgeInsets.all(18.0),
-    margin: const EdgeInsets.all(8.0),
-    decoration: BoxDecoration(
-        color: Color(0xffced4eb),
-        borderRadius: BorderRadius.circular(
-          8.0,
-        )),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget cardIncome(String value) {
+    return Row(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white60,
+            borderRadius: BorderRadius.circular(
+              20.0,
+            ),
+          ),
+          padding: EdgeInsets.all(
+            6.0,
+          ),
+          child: Icon(
+            Icons.arrow_downward,
+            size: 28.0,
+            color: Colors.green[700],
+          ),
+          margin: EdgeInsets.only(
+            right: 8.0,
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.arrow_circle_up_outlined,
-                  size: 28.0,
-                  color: Colors.red[700],
-                ),
-                SizedBox(
-                  width: 4.0,
-                ),
-                Text(
-                  "Expense",
-                  style: TextStyle(
-                    fontSize: 20.0,
-                  ),
-                ),
-              ],
+            Text(
+              "Income",
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.white70,
+              ),
             ),
             Text(
-              "- $value",
+              value,
               style: TextStyle(
-                fontSize: 24.0,
+                fontSize: 20.0,
                 fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
             ),
           ],
         ),
-        //
-        Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Text(
-            note,
-            style: TextStyle(
-              color: Colors.grey[800],
+      ],
+    );
+  }
+
+  Widget cardExpense(String value) {
+    return Row(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white60,
+            borderRadius: BorderRadius.circular(
+              20.0,
             ),
           ),
+          padding: EdgeInsets.all(
+            6.0,
+          ),
+          child: Icon(
+            Icons.arrow_upward,
+            size: 28.0,
+            color: Colors.red[700],
+          ),
+          margin: EdgeInsets.only(
+            right: 8.0,
+          ),
         ),
-      ],
-    ),
-  );
-}
-
-Widget incomeTile(int value, String note) {
-  return Container(
-    padding: const EdgeInsets.all(18.0),
-    margin: const EdgeInsets.all(8.0),
-    decoration: BoxDecoration(
-        color: Color(0xffced4eb),
-        borderRadius: BorderRadius.circular(
-          8.0,
-        )),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.arrow_circle_down_outlined,
-                  size: 28.0,
-                  color: Colors.green[700],
-                ),
-                SizedBox(
-                  width: 4.0,
-                ),
-                Text(
-                  "Credit",
-                  style: TextStyle(
-                    fontSize: 20.0,
-                  ),
-                ),
-              ],
+            Text(
+              "Expense",
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.white70,
+              ),
             ),
             Text(
-              "+ $value",
+              value,
               style: TextStyle(
-                fontSize: 24.0,
+                fontSize: 20.0,
                 fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
             ),
           ],
         ),
-        //
-        Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Text(
-            note,
-            style: TextStyle(
-              color: Colors.grey[800],
-            ),
+      ],
+    );
+  }
+
+  Widget expenseTile(int value, String note, DateTime date, int index) {
+    return InkWell(
+      splashColor: Static.PrimaryMaterialColor[400],
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          deleteInfoSnackBar,
+        );
+      },
+      onLongPress: () async {
+        bool? answer = await showConfirmDialog(
+          context,
+          "WARNING",
+          "This will delete this record. This action is irreversible. Do you want to continue ?",
+        );
+        if (answer != null && answer) {
+          await dbHelper.deleteData(index);
+          setState(() {});
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(18.0),
+        margin: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Color(0xffced4eb),
+          borderRadius: BorderRadius.circular(
+            8.0,
           ),
         ),
-      ],
-    ),
-  );
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.arrow_circle_up_outlined,
+                          size: 28.0,
+                          color: Colors.red[700],
+                        ),
+                        SizedBox(
+                          width: 4.0,
+                        ),
+                        Text(
+                          "Expense",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    //
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(
+                        "${date.day} ${months[date.month - 1]} ",
+                        style: TextStyle(
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "- $value",
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    //
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(
+                        note,
+                        style: TextStyle(
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget incomeTile(int value, String note, DateTime date, int index) {
+    return InkWell(
+      splashColor: Static.PrimaryMaterialColor[400],
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          deleteInfoSnackBar,
+        );
+      },
+      onLongPress: () async {
+        bool? answer = await showConfirmDialog(
+          context,
+          "WARNING",
+          "This will delete this record. This action is irreversible. Do you want to continue ?",
+        );
+
+        if (answer != null && answer) {
+          await dbHelper.deleteData(index);
+          setState(() {});
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(18.0),
+        margin: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Color(0xffced4eb),
+          borderRadius: BorderRadius.circular(
+            8.0,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.arrow_circle_down_outlined,
+                      size: 28.0,
+                      color: Colors.green[700],
+                    ),
+                    SizedBox(
+                      width: 4.0,
+                    ),
+                    Text(
+                      "Credit",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ],
+                ),
+                //
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Text(
+                    "${date.day} ${months[date.month - 1]} ",
+                    style: TextStyle(
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                ),
+                //
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "+ $value",
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                //
+                //
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Text(
+                    note,
+                    style: TextStyle(
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

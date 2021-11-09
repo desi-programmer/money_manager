@@ -9,6 +9,10 @@ in Youtube Tutorial Version 1 : Download the zip
 file the same name.
 ```
 
+## Making Changes for V2
+    - Removed Gradient Code
+    - Adding Date and Delete Option each Expense Tile
+
 # `Screenshots`
 
 <img src="screenshots/Screenshot_1636140672_framed.png" width="500" alt="Screenshot">
