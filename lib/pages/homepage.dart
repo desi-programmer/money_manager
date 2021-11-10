@@ -151,6 +151,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
             //
             getTotalBalance(snapshot.data!);
             getPlotPoints(snapshot.data!);
+            print(snapshot.data!);
             return ListView(
               children: [
                 //
@@ -327,7 +328,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                   ),
                 ),
                 //
-                dataSet.isEmpty
+                dataSet.isEmpty || dataSet.length < 2
                     ? Container(
                         padding: EdgeInsets.symmetric(
                           vertical: 40.0,
@@ -425,7 +426,14 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    Map dataAtIndex = snapshot.data![index];
+                    Map dataAtIndex = {};
+                    try {
+                      dataAtIndex = snapshot.data![index];
+                    } catch (e) {
+                      // delete at deletes that value and value,
+                      // hence makign it null here., as we still build on the length.
+                      return Container();
+                    }
                     if (dataAtIndex['type'] == "Income") {
                       return incomeTile(
                         dataAtIndex['amount'],

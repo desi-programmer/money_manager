@@ -11,7 +11,7 @@ file the same name.
 
 ## Making Changes for V2
     - Removed Gradient Code
-    - Adding Date and Delete Option each Expense Tile
+    - Adding Date and Delete Option in each Expense Tile
 
 # `Screenshots`
 
