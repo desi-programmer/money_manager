@@ -1,5 +1,5 @@
 import 'package:expense/controllers/db_helper.dart';
-import 'package:expense/pages/add_expense_no_gradient.dart';
+import 'package:expense/pages/add_transaction.dart';
 import 'package:expense/pages/settings.dart';
 import 'package:expense/pages/widgets/confirm_dialog.dart';
 import 'package:expense/pages/widgets/info_snackbar.dart';
