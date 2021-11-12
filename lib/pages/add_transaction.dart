@@ -199,6 +199,9 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
                   if (val) {
                     setState(() {
                       type = "Income";
+                      if (note.isEmpty || note == "Expense") {
+                        note = 'Income';
+                      }
                     });
                   }
                 },
@@ -220,6 +223,10 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
                   if (val) {
                     setState(() {
                       type = "Expense";
+
+                      if (note.isEmpty || note == "Income") {
+                        note = 'Expense';
+                      }
                     });
                   }
                 },
@@ -288,12 +295,24 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
             height: 50.0,
             child: ElevatedButton(
               onPressed: () {
-                // print(amount);
-                // print(type);
-                // print(selectedDate);
-                DbHelper dbHelper = DbHelper();
-                dbHelper.addData(amount!, selectedDate, type, note);
-                Navigator.of(context).pop();
+                if (amount != null) {
+                  DbHelper dbHelper = DbHelper();
+                  dbHelper.addData(amount!, selectedDate, type, note);
+                  Navigator.of(context).pop();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.red[700],
+                      content: Text(
+                        "Please enter a valid Amount !",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                }
               },
               child: Text(
                 "Add",

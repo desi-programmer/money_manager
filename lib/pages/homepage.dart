@@ -66,16 +66,22 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   //
 
   List<FlSpot> getPlotPoints(Map entireData) {
+    double day = 0.0;
+    double expense = 0.0;
     dataSet = [];
     entireData.forEach((key, value) {
       if (value['type'] == "Expense" &&
           (value['date'] as DateTime).month == today.month) {
+        var existingExpense = dataSet.where((element) =>
+            element.x == (value['date'] as DateTime).day.toDouble());
+        print(existingExpense);
         dataSet.add(
           FlSpot(
             (value['date'] as DateTime).day.toDouble(),
             (value['amount'] as int).toDouble(),
           ),
         );
+        // print(dataSet[0].x);
       }
     });
     return dataSet;
