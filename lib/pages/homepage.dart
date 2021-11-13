@@ -28,6 +28,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   int totalIncome = 0;
   int totalExpense = 0;
   List<FlSpot> dataSet = [];
+  List<BarChartGroupData> barChartData = [];
   DateTime today = DateTime.now();
 
   List<String> months = [
@@ -66,25 +67,76 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   //
 
   List<FlSpot> getPlotPoints(Map entireData) {
-    double day = 0.0;
-    double expense = 0.0;
     dataSet = [];
+    List tempDataSet = [];
     entireData.forEach((key, value) {
       if (value['type'] == "Expense" &&
           (value['date'] as DateTime).month == today.month) {
-        var existingExpense = dataSet.where((element) =>
-            element.x == (value['date'] as DateTime).day.toDouble());
-        print(existingExpense);
         dataSet.add(
           FlSpot(
             (value['date'] as DateTime).day.toDouble(),
             (value['amount'] as int).toDouble(),
           ),
         );
-        // print(dataSet[0].x);
       }
     });
     return dataSet;
+  }
+
+  List<BarChartGroupData> getBarChartData(Map entireData) {
+    List tempdata = [];
+    tempdata = [];
+    entireData.forEach((key, value) {
+      if (value['type'] == "Expense" &&
+          (value['date'] as DateTime).month == today.month) {
+        tempdata.add({
+          'day': (value['date'] as DateTime).day,
+          'amount': value['amount']
+        });
+      }
+    });
+
+    for (var i = 0; i < tempdata.length; i++) {
+      for (var j = 1; j < tempdata.length - i; j++) {
+        // print('$i + $j');
+        if (tempdata[i]['day'] == tempdata[j]['day']) {
+          // append
+          tempdata[i]['amount'] = tempdata[i]['amount'] + tempdata[j]['amount'];
+          // delete
+          tempdata.removeAt(j);
+        }
+      }
+    }
+
+    // Sorting the list as per the date
+    tempdata.sort((a, b) => a['day'].compareTo(b['day']));
+
+    // clean pre existing value
+    barChartData = [];
+    for (var i = 0; i < tempdata.length; i++) {
+      barChartData.add(
+        BarChartGroupData(
+          x: tempdata[i]['day'],
+          barRods: [
+            BarChartRodData(
+              y: tempdata[i]['amount'].toDouble(),
+              borderRadius: BorderRadius.circular(
+                12.0,
+              ),
+              borderSide: BorderSide(
+                width: 2.0,
+              ),
+              colors: [
+                Colors.blueAccent,
+                Static.PrimaryColor,
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    return barChartData;
   }
 
   getTotalBalance(Map entireData) {
@@ -157,7 +209,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
             //
             getTotalBalance(snapshot.data!);
             getPlotPoints(snapshot.data!);
-            print(snapshot.data!);
+            // print(snapshot.data!);
             return ListView(
               children: [
                 //
@@ -415,6 +467,101 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                         ),
                       ),
                 //
+                //
+                Padding(
+                  padding: const EdgeInsets.all(
+                    12.0,
+                  ),
+                  child: Text(
+                    "Expenses as Bar Chart",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+                //
+                //
+                barChartData.length < 2
+                    ? Container(
+                        padding: EdgeInsets.all(
+                          20.0,
+                        ),
+                        margin: EdgeInsets.all(
+                          12.0,
+                        ),
+                        height: 400.0,
+                        width: 400.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            8.0,
+                          ),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          "Insufficient Data to render chart !",
+                        ),
+                      )
+                    : Container(
+                        padding: EdgeInsets.all(
+                          20.0,
+                        ),
+                        margin: EdgeInsets.all(
+                          12.0,
+                        ),
+                        height: 500.0,
+                        width: 400.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            8.0,
+                          ),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: BarChart(
+                          BarChartData(
+                            borderData: FlBorderData(
+                              show: false,
+                            ),
+                            alignment: BarChartAlignment.spaceEvenly,
+                            barGroups: getBarChartData(snapshot.data!),
+                            titlesData: FlTitlesData(
+                              leftTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 50.0,
+                                getTextStyles: (context, i) => TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              rightTitles: SideTitles(
+                                showTitles: false,
+                              ),
+                              topTitles: SideTitles(
+                                showTitles: false,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                //
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Text(
@@ -459,7 +606,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                 ),
                 //
                 SizedBox(
-                  height: 40.0,
+                  height: 60.0,
                 ),
               ],
             );
