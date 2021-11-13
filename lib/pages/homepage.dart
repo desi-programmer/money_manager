@@ -68,7 +68,6 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
 
   List<FlSpot> getPlotPoints(Map entireData) {
     dataSet = [];
-    List tempDataSet = [];
     entireData.forEach((key, value) {
       if (value['type'] == "Expense" &&
           (value['date'] as DateTime).month == today.month) {
