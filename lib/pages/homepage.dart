@@ -208,6 +208,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
             //
             getTotalBalance(snapshot.data!);
             getPlotPoints(snapshot.data!);
+            getBarChartData(snapshot.data!);
             // print(snapshot.data!);
             return ListView(
               children: [
@@ -513,12 +514,12 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                       )
                     : Container(
                         padding: EdgeInsets.all(
-                          20.0,
+                          25.0,
                         ),
                         margin: EdgeInsets.all(
                           12.0,
                         ),
-                        height: 500.0,
+                        height: 400.0,
                         width: 400.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(
