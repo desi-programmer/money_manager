@@ -105,7 +105,34 @@ class _AddExpenseNoGradientState extends State<AddExpenseNoGradient> {
                   onChanged: (val) {
                     try {
                       amount = int.parse(val);
-                    } catch (e) {}
+                    } catch (e) {
+                      // show Error
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.red,
+                          duration: Duration(
+                            seconds: 2,
+                          ),
+                          content: Row(
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 6.0,
+                              ),
+                              Text(
+                                "Enter only Numbers as Amount",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
                   },
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
