@@ -68,17 +68,29 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
 
   List<FlSpot> getPlotPoints(Map entireData) {
     dataSet = [];
+    List tempdataSet = [];
     entireData.forEach((key, value) {
       if (value['type'] == "Expense" &&
           (value['date'] as DateTime).month == today.month) {
-        dataSet.add(
-          FlSpot(
-            (value['date'] as DateTime).day.toDouble(),
-            (value['amount'] as int).toDouble(),
-          ),
-        );
+        //
+        tempdataSet.add({
+          'day': (value['date'] as DateTime).day,
+          'amount': value['amount']
+        });
       }
     });
+    //
+    // Sorting the list as per the date
+    tempdataSet.sort((a, b) => a['day'].compareTo(b['day']));
+    //
+    for (var i = 0; i < tempdataSet.length; i++) {
+      dataSet.add(
+        FlSpot(
+          tempdataSet[i]['day'].toDouble(),
+          tempdataSet[i]['amount'].toDouble(),
+        ),
+      );
+    }
     return dataSet;
   }
 
@@ -565,7 +577,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Text(
-                    "Recent Expenses",
+                    "Recent Transactions",
                     style: TextStyle(
                       fontSize: 32.0,
                       color: Colors.black87,
@@ -577,13 +589,13 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: snapshot.data!.length,
+                  itemCount: snapshot.data!.length + 1,
                   itemBuilder: (context, index) {
                     Map dataAtIndex = {};
                     try {
                       dataAtIndex = snapshot.data![index];
                     } catch (e) {
-                      // delete at deletes that value and value,
+                      // deleteAt deletes that key and value,
                       // hence makign it null here., as we still build on the length.
                       return Container();
                     }
