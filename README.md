@@ -39,10 +39,11 @@ file the same name.
 
 ## `Features`
 
+    - [ ] Fix year when month is december
     - [ ] Add Montly limit and show How much has been spent Yet.
-    - [ ] Show Charts of Money Spent on each day
-    - [ ] Add Expense and Income
-    - [ ] Show Total Balance
+    - [x] Show Charts of Money Spent on each day
+    - [x] Add Expense and Income
+    - [x] Show Total Balance
     - [ ] Option to Extract data or Server ?
     - [ ] Option to add Bio Auth
     - [ ] Chart plot points is based on when user enters data , not on expense date , so chart might have bars coming back and moving front
