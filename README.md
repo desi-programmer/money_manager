@@ -15,17 +15,17 @@ file the same name.
 
 # `Screenshots`
 
-<img src="screenshots/Screenshot_1636140672_framed.png" width="500" alt="Screenshot">
+<img src="screenshots/Screenshot_1636140672_framed.png" width="300" alt="Screenshot">
 
-<img src="screenshots/Screenshot_1636140708_framed.png" width="500" alt="Screenshot">
+<img src="screenshots/Screenshot_1636140708_framed.png" width="300" alt="Screenshot">
 
-<img src="screenshots/Screenshot_1636140723_framed.png" width="500" alt="Screenshot">
+<img src="screenshots/Screenshot_1636140723_framed.png" width="300" alt="Screenshot">
 
-<img src="screenshots/Screenshot_1636140829_framed.png" width="500" alt="Screenshot">
+<img src="screenshots/Screenshot_1636140829_framed.png" width="300" alt="Screenshot">
 
-<img src="screenshots/Screenshot_1636140834_framed.png" width="500" alt="Screenshot">
+<img src="screenshots/Screenshot_1636140834_framed.png" width="300" alt="Screenshot">
 
-<img src="screenshots/Screenshot_1636140838_framed.png" width="500" alt="Screenshot">
+<img src="screenshots/Screenshot_1636140838_framed.png" width="300" alt="Screenshot">
 
 # `Credits`
 
