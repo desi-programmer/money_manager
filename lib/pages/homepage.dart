@@ -30,6 +30,8 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
   List<FlSpot> dataSet = [];
   List<BarChartGroupData> barChartData = [];
   DateTime today = DateTime.now();
+  DateTime now = DateTime.now();
+  int index = 1;
 
   List<String> months = [
     "Jan",
@@ -155,12 +157,14 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
     totalIncome = 0;
     totalExpense = 0;
     entireData.forEach((key, value) {
-      if (value['type'] == "Income") {
-        totalBalance += (value['amount'] as int);
-        totalIncome += (value['amount'] as int);
-      } else {
-        totalBalance -= (value['amount'] as int);
-        totalExpense += (value['amount'] as int);
+      if ((value['date'] as DateTime).month == today.month) {
+        if (value['type'] == "Income") {
+          totalBalance += (value['amount'] as int);
+          totalIncome += (value['amount'] as int);
+        } else {
+          totalBalance -= (value['amount'] as int);
+          totalExpense += (value['amount'] as int);
+        }
       }
     });
   }
@@ -304,6 +308,8 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                     ],
                   ),
                 ),
+                //
+                selectMonth(),
                 //
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -495,7 +501,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                 ),
                 //
                 //
-                barChartData.isNotEmpty
+                barChartData.isEmpty
                     ? Container(
                         padding: EdgeInsets.all(
                           20.0,
@@ -503,8 +509,6 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                         margin: EdgeInsets.all(
                           12.0,
                         ),
-                        height: 400.0,
-                        width: 400.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(
                             8.0,
@@ -522,6 +526,9 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                         ),
                         child: Text(
                           "Insufficient Data to render chart !",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
                         ),
                       )
                     : Container(
@@ -599,20 +606,25 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                       // hence makign it null here., as we still build on the length.
                       return Container();
                     }
-                    if (dataAtIndex['type'] == "Income") {
-                      return incomeTile(
-                        dataAtIndex['amount'],
-                        dataAtIndex['note'],
-                        dataAtIndex['date'],
-                        index,
-                      );
+                    if ((dataAtIndex['date'] as DateTime).month ==
+                        today.month) {
+                      if (dataAtIndex['type'] == "Income") {
+                        return incomeTile(
+                          dataAtIndex['amount'],
+                          dataAtIndex['note'],
+                          dataAtIndex['date'],
+                          index,
+                        );
+                      } else {
+                        return expenseTile(
+                          dataAtIndex['amount'],
+                          dataAtIndex['note'],
+                          dataAtIndex['date'],
+                          index,
+                        );
+                      }
                     } else {
-                      return expenseTile(
-                        dataAtIndex['amount'],
-                        dataAtIndex['note'],
-                        dataAtIndex['date'],
-                        index,
-                      );
+                      return Container();
                     }
                   },
                 ),
@@ -920,6 +932,100 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget selectMonth() {
+    return Padding(
+      padding: EdgeInsets.all(
+        8.0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          InkWell(
+            onTap: () {
+              setState(() {
+                index = 3;
+                today = DateTime(now.year, now.month - 2, today.day);
+              });
+            },
+            child: Container(
+              height: 50.0,
+              width: MediaQuery.of(context).size.width * 0.3,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  8.0,
+                ),
+                color: index == 3 ? Static.PrimaryColor : Colors.white,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                months[now.month - 3],
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  color: index == 3 ? Colors.white : Static.PrimaryColor,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              setState(() {
+                index = 2;
+                today = DateTime(now.year, now.month - 1, today.day);
+              });
+            },
+            child: Container(
+              height: 50.0,
+              width: MediaQuery.of(context).size.width * 0.3,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  8.0,
+                ),
+                color: index == 2 ? Static.PrimaryColor : Colors.white,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                months[now.month - 2],
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  color: index == 2 ? Colors.white : Static.PrimaryColor,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              setState(() {
+                index = 1;
+                today = DateTime.now();
+              });
+            },
+            child: Container(
+              height: 50.0,
+              width: MediaQuery.of(context).size.width * 0.3,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  8.0,
+                ),
+                color: index == 1 ? Static.PrimaryColor : Colors.white,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                months[now.month - 1],
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  color: index == 1 ? Colors.white : Static.PrimaryColor,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
