@@ -495,7 +495,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                 ),
                 //
                 //
-                barChartData.length < 2
+                barChartData.isNotEmpty
                     ? Container(
                         padding: EdgeInsets.all(
                           20.0,
