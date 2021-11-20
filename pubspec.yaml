@@ -33,6 +33,7 @@ dependencies:
   hive_flutter: ^1.1.0
   shared_preferences: ^2.0.8
   sqflite: ^2.0.0+4
+  local_auth: ^1.1.8
 
   flutter:
     sdk: flutter

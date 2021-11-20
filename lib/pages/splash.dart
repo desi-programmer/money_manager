@@ -2,6 +2,7 @@
 
 import 'package:expense/controllers/db_helper.dart';
 import 'package:expense/pages/add_name.dart';
+import 'package:expense/pages/auth.dart';
 import 'package:expense/pages/homepage.dart';
 import 'package:flutter/material.dart';
 
@@ -25,11 +26,23 @@ class _SplashState extends State<Splash> {
   Future getName() async {
     String? name = await dbHelper.getName();
     if (name != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => HomePageSingleColor(),
-        ),
-      );
+      // user has entered a name
+      // since name is also important and can't be null
+      // we will check for auth here and will show , auth if it is on
+      bool? auth = await dbHelper.getLocalAuth();
+      if (auth != null && auth) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => FingerPrintAuth(),
+          ),
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => HomePageSingleColor(),
+          ),
+        );
+      }
     } else {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

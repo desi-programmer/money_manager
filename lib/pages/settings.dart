@@ -148,6 +148,49 @@ class _SettingsState extends State<Settings> {
               color: Colors.black87,
             ),
           ),
+          //
+          SizedBox(
+            height: 20.0,
+          ),
+          //
+          FutureBuilder<bool>(
+            future: dbHelper.getLocalAuth(),
+            builder: (context, snapshot) {
+              // print(snapshot.data);
+              if (snapshot.hasData) {
+                return SwitchListTile(
+                  onChanged: (val) {
+                    DbHelper dbHelper = DbHelper();
+                    dbHelper.setLocalAuth(val);
+                    setState(() {});
+                  },
+                  value: snapshot.data == null ? false : snapshot.data!,
+                  tileColor: Colors.white,
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 12.0,
+                    horizontal: 20.0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      8.0,
+                    ),
+                  ),
+                  title: Text(
+                    "Local Bio Auth",
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  subtitle: Text(
+                    "Secure This app, Use Fingerprint to unlock the app.",
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
         ],
       ),
     );
