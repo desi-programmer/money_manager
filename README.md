@@ -39,21 +39,21 @@ file the same name.
 
 ## `Features`
 
-<input type="checkbox" /> Fix year when month is december
+`❌` Fix year when month is December. 
 
-<input type="checkbox" /> Add Montly limit and show How much has been spent Yet.
+`❌`  Add Monthly limit and show How much has been spent Yet.
 
-<input type="checkbox" /> Show Charts of Money Spent on each day
-    
-<input type="checkbox" checked /> Add Expense and Income
+`❌` Show Charts of Money Spent on each day
 
-<input type="checkbox" checked /> Show Total Balance
+`✔️` Add Expense and Income
 
-<input type="checkbox" /> Option to Extract data or Server ?
+`✔️` Show Total Balance
 
-<input type="checkbox" /> Option to add Bio Auth
+`❌` Option to Extract data or Server ?
 
-<input type="checkbox" /> Chart plot points is based on when user enters data , not on expense date , so chart might have bars coming back and moving front
+`❌` Option to add Bio Auth
+
+`❌` Chart plot points is based on when user enters data , not on expense date , so chart might have bars coming back and moving front
 
 ```
 ## `Data`
