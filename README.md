@@ -3,13 +3,14 @@
 This app helps you with managing Income and Expense. It is coded in flutter, dart hive. TBH I want to code the same app in Flutter , React and Jetpack Compose to see the difference and get some experience, but let's see what Happens. :) 🤠🤗
 
 ```
-Note : This is right now an active project where I 
-am making changes, If you want the same version as 
-in Youtube Tutorial Version 1 : Download the zip 
+Note : This is right now an active project where I
+am making changes, If you want the same version as
+in Youtube Tutorial Version 1 : Download the zip
 file the same name.
 ```
 
 ## Making Changes for V2
+
     - Removed Gradient Code
     - Adding Date and Delete Option in each Expense Tile
 
@@ -27,6 +28,10 @@ file the same name.
 
 <img src="screenshots/Screenshot_1636140838_framed.png" width="300" alt="Screenshot">
 
+<img src="screenshots/Screenshot_1638088460_framed.png.png" width="300" alt="Screenshot">
+
+<img src="screenshots/Screenshot_1638088465_framed.png" width="300" alt="Screenshot">
+
 # `Credits`
 
 ```
@@ -39,9 +44,9 @@ file the same name.
 
 ## `Features`
 
-`❌` Fix year when month is December. 
+`❌` Fix year when month is December.
 
-`❌`  Add Monthly limit and show How much has been spent Yet.
+`❌` Add Monthly limit and show How much has been spent Yet.
 
 `❌` Show Charts of Money Spent on each day
 
