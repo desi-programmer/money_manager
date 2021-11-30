@@ -3,10 +3,7 @@
 This app helps you with managing Income and Expense. It is coded in flutter, dart hive. TBH I want to code the same app in Flutter , React and Jetpack Compose to see the difference and get some experience, but let's see what Happens. :) 🤠🤗
 
 ```
-Note : This is right now an active project where I
-am making changes, If you want the same version as
-in Youtube Tutorial Version 1 : Download the zip
-file the same name.
+Will try and update this to use different (state management) Libraries.
 ```
 
 ## Making Changes for V2
@@ -16,11 +13,11 @@ file the same name.
 
 # `Screenshots`
 
+<img src="screenshots/Screenshot_1638287748_framed.png" width="300" alt="Screenshot">
+
 <img src="screenshots/Screenshot_1636140672_framed.png" width="300" alt="Screenshot">
 
 <img src="screenshots/Screenshot_1636140708_framed.png" width="300" alt="Screenshot">
-
-<img src="screenshots/Screenshot_1636140723_framed.png" width="300" alt="Screenshot">
 
 <img src="screenshots/Screenshot_1636140829_framed.png" width="300" alt="Screenshot">
 
@@ -28,7 +25,7 @@ file the same name.
 
 <img src="screenshots/Screenshot_1636140838_framed.png" width="300" alt="Screenshot">
 
-<img src="screenshots/Screenshot_1638088460_framed.png.png" width="300" alt="Screenshot">
+<img src="screenshots/Screenshot_1638088460_framed.png" width="300" alt="Screenshot">
 
 <img src="screenshots/Screenshot_1638088465_framed.png" width="300" alt="Screenshot">
 
@@ -44,6 +41,8 @@ file the same name.
 
 ## `BUG`
 When month is 12, Need to switch years too, to reflect changes. ( Showing transaction of nearby months )
+Bar chart skips date with single unit of expense.
+Multiple setState cause anomalies, will use something else.
 
 ## `Features`
 
