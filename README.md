@@ -42,6 +42,9 @@ file the same name.
 ## App Icon : <a target="_blank" href="https://icons8.com/icon/pBgBsoOMl5LD/money">Money</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 ```
 
+## `BUG`
+When month is 12, Need to switch years too, to reflect changes. ( Showing transaction of nearby months )
+
 ## `Features`
 
 `❌` Fix year when month is December.
@@ -56,7 +59,11 @@ file the same name.
 
 `❌` Option to Extract data or Server ?
 
-`❌` Option to add Bio Auth
+`✔️` Option to add Bio Auth
+
+`✔️` Add Provider ( possibly in another branch )
+
+`❌` Add Models For Data
 
 `❌` Chart plot points is based on when user enters data , not on expense date , so chart might have bars coming back and moving front
 
