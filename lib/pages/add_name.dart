@@ -127,7 +127,7 @@ class _AddNameState extends State<AddName> {
                     await dbHelper.addName(name);
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => HomePageSingleColor(),
+                        builder: (context) => HomePage(),
                       ),
                     );
                   }

@@ -1,5 +1,6 @@
 import 'package:expense/controllers/db_helper.dart';
 import 'package:expense/pages/add_transaction.dart';
+import 'package:expense/pages/models/transaction.dart';
 import 'package:expense/pages/settings.dart';
 import 'package:expense/pages/widgets/confirm_dialog.dart';
 import 'package:expense/pages/widgets/info_snackbar.dart';
@@ -11,14 +12,14 @@ import 'package:expense/static.dart' as Static;
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePageSingleColor extends StatefulWidget {
-  const HomePageSingleColor({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageSingleColorState createState() => _HomePageSingleColorState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageSingleColorState extends State<HomePageSingleColor> {
+class _HomePageState extends State<HomePage> {
   //
   late Box box;
   late SharedPreferences preferences;
@@ -59,114 +60,67 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
     preferences = await SharedPreferences.getInstance();
   }
 
-  Future<Map> fetch() {
+  Future<List<TransactionModel>> fetch() async {
     if (box.values.isEmpty) {
-      return Future.value({});
+      return Future.value([]);
     } else {
-      return Future.value(box.toMap());
+      // return Future.value(box.toMap());
+      List<TransactionModel> items = [];
+      box.toMap().values.forEach((element) {
+        // print(element);
+        items.add(
+          TransactionModel(
+            element['amount'] as int,
+            element['note'],
+            element['date'] as DateTime,
+            element['type'],
+          ),
+        );
+      });
+      return items;
     }
   }
   //
 
-  List<FlSpot> getPlotPoints(Map entireData) {
+  List<FlSpot> getPlotPoints(List<TransactionModel> entireData) {
     dataSet = [];
     List tempdataSet = [];
-    entireData.forEach((key, value) {
-      if (value['type'] == "Expense" &&
-          (value['date'] as DateTime).month == today.month) {
-        //
-        tempdataSet.add({
-          'day': (value['date'] as DateTime).day,
-          'amount': value['amount']
-        });
+
+    for (TransactionModel item in entireData) {
+      if (item.date.month == today.month && item.type == "Expense") {
+        tempdataSet.add(item);
       }
-    });
+    }
     //
     // Sorting the list as per the date
-    tempdataSet.sort((a, b) => a['day'].compareTo(b['day']));
+    tempdataSet.sort((a, b) => a.date.day.compareTo(b.date.day));
     //
     for (var i = 0; i < tempdataSet.length; i++) {
       dataSet.add(
         FlSpot(
-          tempdataSet[i]['day'].toDouble(),
-          tempdataSet[i]['amount'].toDouble(),
+          tempdataSet[i].date.day.toDouble(),
+          tempdataSet[i].amount.toDouble(),
         ),
       );
     }
     return dataSet;
   }
 
-  List<BarChartGroupData> getBarChartData(Map entireData) {
-    List tempdata = [];
-    tempdata = [];
-    entireData.forEach((key, value) {
-      if (value['type'] == "Expense" &&
-          (value['date'] as DateTime).month == today.month) {
-        tempdata.add({
-          'day': (value['date'] as DateTime).day,
-          'amount': value['amount']
-        });
-      }
-    });
-
-    for (var i = 0; i < tempdata.length; i++) {
-      for (var j = 1; j < tempdata.length - i; j++) {
-        // print('$i + $j');
-        if (tempdata[i]['day'] == tempdata[j]['day']) {
-          // append
-          tempdata[i]['amount'] = tempdata[i]['amount'] + tempdata[j]['amount'];
-          // delete
-          tempdata.removeAt(j);
-        }
-      }
-    }
-
-    // Sorting the list as per the date
-    tempdata.sort((a, b) => a['day'].compareTo(b['day']));
-
-    // clean pre existing value
-    barChartData = [];
-    for (var i = 0; i < tempdata.length; i++) {
-      barChartData.add(
-        BarChartGroupData(
-          x: tempdata[i]['day'],
-          barRods: [
-            BarChartRodData(
-              y: tempdata[i]['amount'].toDouble(),
-              borderRadius: BorderRadius.circular(
-                12.0,
-              ),
-              borderSide: BorderSide(
-                width: 2.0,
-              ),
-              colors: [
-                Colors.blueAccent,
-                Static.PrimaryColor,
-              ],
-            ),
-          ],
-        ),
-      );
-    }
-
-    return barChartData;
-  }
-
-  getTotalBalance(Map entireData) {
+  getTotalBalance(List<TransactionModel> entireData) {
     totalBalance = 0;
     totalIncome = 0;
     totalExpense = 0;
-    entireData.forEach((key, value) {
-      if ((value['date'] as DateTime).month == today.month) {
-        if (value['type'] == "Income") {
-          totalBalance += (value['amount'] as int);
-          totalIncome += (value['amount'] as int);
+    for (TransactionModel data in entireData) {
+      if (data.date.month == today.month) {
+        if (data.type == "Income") {
+          totalBalance += data.amount;
+          totalIncome += data.amount;
         } else {
-          totalBalance -= (value['amount'] as int);
-          totalExpense += (value['amount'] as int);
+          totalBalance -= data.amount;
+          totalExpense += data.amount;
         }
       }
-    });
+    }
   }
 
   @override
@@ -202,7 +156,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
         ),
       ),
       //
-      body: FutureBuilder<Map>(
+      body: FutureBuilder<List<TransactionModel>>(
         future: fetch(),
         builder: (context, snapshot) {
           // print(snapshot.data);
@@ -210,6 +164,9 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
             return Center(
               child: Text(
                 "Oopssss !!! There is some error !",
+                style: TextStyle(
+                  fontSize: 24.0,
+                ),
               ),
             );
           }
@@ -218,14 +175,15 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
               return Center(
                 child: Text(
                   "You haven't added Any Data !",
+                  style: TextStyle(
+                    fontSize: 24.0,
+                  ),
                 ),
               );
             }
             //
             getTotalBalance(snapshot.data!);
             getPlotPoints(snapshot.data!);
-            getBarChartData(snapshot.data!);
-            // print(snapshot.data!);
             return ListView(
               children: [
                 //
@@ -469,6 +427,7 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                             ),
                             lineBarsData: [
                               LineChartBarData(
+                                // spots: getPlotPoints(snapshot.data!),
                                 spots: getPlotPoints(snapshot.data!),
                                 isCurved: false,
                                 barWidth: 2.5,
@@ -481,102 +440,6 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                      ),
-                //
-                //
-                Padding(
-                  padding: const EdgeInsets.all(
-                    12.0,
-                  ),
-                  child: Text(
-                    "Expenses as Bar Chart",
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-                //
-                //
-                barChartData.isEmpty
-                    ? Container(
-                        padding: EdgeInsets.all(
-                          20.0,
-                        ),
-                        margin: EdgeInsets.all(
-                          12.0,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            8.0,
-                          ),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Text(
-                          "Insufficient Data to render chart !",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                        ),
-                      )
-                    : Container(
-                        padding: EdgeInsets.all(
-                          25.0,
-                        ),
-                        margin: EdgeInsets.all(
-                          12.0,
-                        ),
-                        height: 400.0,
-                        width: 400.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            8.0,
-                          ),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: BarChart(
-                          BarChartData(
-                            borderData: FlBorderData(
-                              show: false,
-                            ),
-                            alignment: BarChartAlignment.spaceEvenly,
-                            barGroups: getBarChartData(snapshot.data!),
-                            titlesData: FlTitlesData(
-                              leftTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 50.0,
-                                getTextStyles: (context, i) => TextStyle(
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                              rightTitles: SideTitles(
-                                showTitles: false,
-                              ),
-                              topTitles: SideTitles(
-                                showTitles: false,
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -598,28 +461,29 @@ class _HomePageSingleColorState extends State<HomePageSingleColor> {
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: snapshot.data!.length + 1,
                   itemBuilder: (context, index) {
-                    Map dataAtIndex = {};
+                    TransactionModel dataAtIndex;
                     try {
+                      // dataAtIndex = snapshot.data![index];
                       dataAtIndex = snapshot.data![index];
                     } catch (e) {
                       // deleteAt deletes that key and value,
                       // hence makign it null here., as we still build on the length.
                       return Container();
                     }
-                    if ((dataAtIndex['date'] as DateTime).month ==
-                        today.month) {
-                      if (dataAtIndex['type'] == "Income") {
+
+                    if (dataAtIndex.date.month == today.month) {
+                      if (dataAtIndex.type == "Income") {
                         return incomeTile(
-                          dataAtIndex['amount'],
-                          dataAtIndex['note'],
-                          dataAtIndex['date'],
+                          dataAtIndex.amount,
+                          dataAtIndex.note,
+                          dataAtIndex.date,
                           index,
                         );
                       } else {
                         return expenseTile(
-                          dataAtIndex['amount'],
-                          dataAtIndex['note'],
-                          dataAtIndex['date'],
+                          dataAtIndex.amount,
+                          dataAtIndex.note,
+                          dataAtIndex.date,
                           index,
                         );
                       }

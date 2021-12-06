@@ -39,7 +39,7 @@ class _SplashState extends State<Splash> {
       } else {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => HomePageSingleColor(),
+            builder: (context) => HomePage(),
           ),
         );
       }

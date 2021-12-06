@@ -23,14 +23,13 @@ class _FingerPrintAuthState extends State<FingerPrintAuth> {
       if (authenticated) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => HomePageSingleColor(),
+            builder: (context) => HomePage(),
           ),
         );
       } else {
         setState(() {});
       }
     } catch (e) {
-      print(e);
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
