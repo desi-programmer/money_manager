@@ -40,6 +40,7 @@ Will try and update this to use different (state management) Libraries.
 ```
 
 ## `BUG`
+
 When month is 12, Need to switch years too, to reflect changes. ( Showing transaction of nearby months )
 Bar chart skips date with single unit of expense.
 Multiple setState cause anomalies, will use something else.
@@ -62,9 +63,9 @@ Multiple setState cause anomalies, will use something else.
 
 `✔️` Add Provider ( possibly in another branch )
 
-`❌` Add Models For Data
+`✔️` Add Models For Data
 
-`❌` Chart plot points is based on when user enters data , not on expense date , so chart might have bars coming back and moving front
+`✔️` Chart plot points is based on when user enters data , not on expense date , so chart might have bars coming back and moving front
 
 ```
 ## `Data`
