@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
   int totalIncome = 0;
   int totalExpense = 0;
   List<FlSpot> dataSet = [];
-  List<BarChartGroupData> barChartData = [];
   DateTime today = DateTime.now();
   DateTime now = DateTime.now();
   int index = 1;
@@ -676,7 +675,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
                       "- $value",
